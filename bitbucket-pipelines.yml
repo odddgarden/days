@@ -1,0 +1,29 @@
+image: php:8.2-fpm  
+
+pipelines:
+  default:
+    - step:
+        services: 
+          - mysql
+        name: 'Build and Test'
+        script:
+          - bash ./devops/build-server.sh
+          - bash ./devops/build-project.sh
+
+    # The following deployment steps will be executed for each pipeline run. To configure your steps and conditionally deploy see https://support.atlassian.com/bitbucket-cloud/docs/configure-bitbucket-pipelinesyml/
+    # - step:
+    #     name: 'Deployment to Production'
+    #     deployment: production
+    #     trigger: 'manual'
+    #     script:
+    #       - echo "Your deployment to production script goes here..."
+
+definitions: 
+  services:
+    mysql:
+      image: mysql:8.2
+      environment:
+        MYSQL_DATABASE: 'homestead'
+        MYSQL_RANDOM_ROOT_PASSWORD: 'yes'
+        MYSQL_USER: 'homestead'
+        MYSQL_PASSWORD: 'secret'
